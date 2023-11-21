@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HealthCenterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +19,10 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
 });
+
+/* Create a superadmin middleware here to check if the request is coming from the superadmin */
+Route::middleware(['auth:api'])
+    ->prefix('health-center')
+    ->group(function () {
+        Route::post('/', [HealthCenterController::class, 'store']);
+    });
