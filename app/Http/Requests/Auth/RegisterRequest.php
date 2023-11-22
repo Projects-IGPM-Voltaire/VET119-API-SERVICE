@@ -33,6 +33,7 @@ class RegisterRequest extends FormRequest
             ],
             'password' => 'required|min:6|required_with:password_confirmation',
             'password_confirmation' => 'same:password',
+            'level' => 'required|string',
         ];
     }
 }

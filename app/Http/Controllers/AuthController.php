@@ -53,7 +53,7 @@ class AuthController extends Controller
                 'first_name' => trim($payload['first_name']),
                 'last_name' => trim($payload['last_name']),
                 'birthday' => $payload['birthday'],
-                '' => trim($payload['mobile_number']),
+                'mobile_number' => trim($payload['mobile_number']),
                 'password' => $payload['password'],
                 'level' => $payload['level'],
             ]);
