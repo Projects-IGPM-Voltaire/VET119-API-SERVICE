@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HealthCenterController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,4 +42,13 @@ Route::middleware(['auth:api'])
         Route::get('/{id}', [UserController::class, 'show']);
         Route::put('/{id}', [UserController::class, 'update']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
+    });
+Route::middleware(['auth:api'])
+    ->prefix('/schedule')
+    ->group(function () {
+        Route::post('/', [ScheduleController::class, 'store']);
+        Route::get('/', [ScheduleController::class, 'index']);
+        Route::get('/{id}', [ScheduleController::class, 'show']);
+        Route::put('/{id}', [ScheduleController::class, 'update']);
+        Route::delete('/{id}', [ScheduleController::class, 'destroy']);
     });
