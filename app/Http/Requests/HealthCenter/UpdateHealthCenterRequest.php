@@ -5,7 +5,7 @@ namespace App\Http\Requests\HealthCenter;
 use App\Http\Requests\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class CreateHealthCenterRequest extends FormRequest
+class UpdateHealthCenterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,11 @@ class CreateHealthCenterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:100',
-            'image' => 'nullable|image|mimes:jpeg,png',
-            'city_code' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png',
+            'city_code' => 'required|integer',
             'barangay_code' => 'required|string',
             'house_number' => 'nullable|string',
             'street' => 'nullable|string',
-            'map_url' => 'required|string',
         ];
     }
 }

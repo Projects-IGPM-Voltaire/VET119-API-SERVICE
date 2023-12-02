@@ -20,9 +20,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-/* Create a superadmin middleware here to check if the request is coming from the superadmin */
-Route::middleware(['auth:api'])
-    ->prefix('health-center')
-    ->group(function () {
-        Route::post('/', [HealthCenterController::class, 'store']);
-    });
+Route::middleware(['auth:api'])->apiResource(
+    '/health-center',
+    HealthCenterController::class
+);

@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('health_center_addresses', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('health_center_id');
             $table->string('city_code');
             $table
                 ->foreign('city_code')
@@ -28,6 +29,12 @@ return new class extends Migration {
             $table->string('street')->nullable();
             $table->string('map_url')->nullable();
             $table->timestamps();
+
+            $table
+                ->foreign('health_center_id')
+                ->references('id')
+                ->on('health_centers')
+                ->onDelete('cascade');
         });
     }
 
