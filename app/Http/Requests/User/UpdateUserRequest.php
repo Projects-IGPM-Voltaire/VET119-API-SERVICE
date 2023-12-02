@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\HealthCenter;
+namespace App\Http\Requests\User;
 
 use App\Http\Requests\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class CreateHealthCenterRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +23,9 @@ class CreateHealthCenterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => 'nullable|image|mimes:jpeg,png',
-            'name' => 'required|min:2|string',
-            'city_code' => 'required|string',
-            'barangay_code' => 'required|string',
-            'house_number' => 'required|string',
-            'street' => 'required|string',
-            'map_url' => 'required|string',
+            'first_name' => 'required|min:2|string',
+            'last_name' => 'required|min:2|string',
+            'birthday' => 'required|date_format:Y-m-d',
         ];
     }
 }

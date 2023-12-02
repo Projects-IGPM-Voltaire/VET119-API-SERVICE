@@ -57,6 +57,15 @@ class AuthController extends Controller
                 'password' => $payload['password'],
                 'level' => $payload['level'],
             ]);
+            if (isset($payload['city_code'])) {
+                $user->address()->update([
+                    'city_code' => $payload['city_code'],
+                    'barangay_code' => $payload['barangay_code'],
+                    'house_number' => $payload['house_number'],
+                    'street' => $payload['street'],
+                ]);
+            }
+
             return customResponse()
                 ->data($user)
                 ->message('Operation success.')

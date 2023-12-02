@@ -10,24 +10,17 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('user_addresses', function (Blueprint $table) {
+        Schema::create('health_center_members', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('health_center_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('city_code');
-            $table->string('barangay_code');
-            $table->string('house_number')->nullable();
-            $table->string('street')->nullable();
+            $table->string('position')->default('staff');
             $table->timestamps();
 
             $table
-                ->foreign('barangay_code')
-                ->references('code')
-                ->on('barangays')
-                ->onDelete('cascade');
-            $table
-                ->foreign('city_code')
-                ->references('code')
-                ->on('cities')
+                ->foreign('health_center_id')
+                ->references('id')
+                ->on('health_centers')
                 ->onDelete('cascade');
             $table
                 ->foreign('user_id')
@@ -42,6 +35,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_addresses');
+        Schema::dropIfExists('health_center_members');
     }
 };

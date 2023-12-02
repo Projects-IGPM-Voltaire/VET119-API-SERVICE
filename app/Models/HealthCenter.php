@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
@@ -23,6 +24,15 @@ class HealthCenter extends Model
     {
         return $this->hasOne(
             HealthCenterAddress::class,
+            'health_center_id',
+            'id'
+        );
+    }
+
+    public function members(): HasMany
+    {
+        return $this->hasMany(
+            HealthCenterMember::class,
             'health_center_id',
             'id'
         );
