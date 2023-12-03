@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class HealthCenterController extends Controller
@@ -71,12 +72,17 @@ class HealthCenterController extends Controller
         try {
             $payload = $request->all();
             $sortBy = $payload['sort_by'] ?? 'desc';
-            $healthCenters = HealthCenter::with([
-                'address',
-                'address.barangay',
-                'image',
-                'members',
-            ])
+            $search = $payload['search'] ?? null;
+            $query = HealthCenter::query();
+            if (isset($search)) {
+                $query->where(
+                    DB::raw('lower(name)'),
+                    'like',
+                    '%' . strtolower($search) . '%'
+                );
+            }
+            $healthCenters = $query
+                ->with(['address', 'address.barangay', 'image', 'members'])
                 ->orderBy('id', $sortBy)
                 ->get();
             return customResponse()
