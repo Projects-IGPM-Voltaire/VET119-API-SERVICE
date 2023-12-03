@@ -34,11 +34,10 @@ class RegisterRequest extends FormRequest
             'password' => 'required|min:6|required_with:password_confirmation',
             'password_confirmation' => 'same:password',
             'level' => 'required|string',
-            'city_code' => 'nullable|string',
-            'barangay_code' => 'nullable|string',
-            'house_number' => 'nullable|string',
-            'street' => 'nullable|string',
-            'map_url' => 'nullable|string',
+            'city_code' => 'required|string',
+            'barangay_code' => 'required|string',
+            'house_number' => 'required|string',
+            'street' => 'required|string',
         ];
     }
 }

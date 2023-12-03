@@ -58,11 +58,11 @@ class AuthController extends Controller
                 'level' => $payload['level'],
             ]);
             if (isset($payload['city_code'])) {
-                $user->address()->update([
+                $user->address()->create([
                     'city_code' => $payload['city_code'],
-                    'barangay_code' => $payload['barangay_code'],
-                    'house_number' => $payload['house_number'],
-                    'street' => $payload['street'],
+                    'barangay_code' => $payload['barangay_code'] ?? null,
+                    'house_number' => $payload['house_number'] ?? null,
+                    'street' => $payload['street'] ?? null,
                 ]);
             }
 
