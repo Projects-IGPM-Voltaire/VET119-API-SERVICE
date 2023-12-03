@@ -29,12 +29,13 @@ class HealthCenterController extends Controller
                 'street' => $payload['street'],
                 'map_url' => $payload['map_url'],
             ]);
-            $image = $payload['image'] ?? null;
+            $imagePayload = $payload['image'] ?? [];
+            $image = $imagePayload[0] ?? null;
             if (isset($image)) {
                 try {
                     $timestamp = Carbon::now()->format('YmdHisu');
                     $name = "{$healthCenter->id}_health_center_${timestamp}.{$image->getClientOriginalExtension()}";
-                    $path = $image->storeAs('images', $name);
+                    $path = Storage::disk('public')->putFile('images', $image);
                     $healthCenter->image()->create([
                         'name' => $name,
                         'original_name' => $image->getClientOriginalName(),
@@ -70,7 +71,12 @@ class HealthCenterController extends Controller
         try {
             $payload = $request->all();
             $sortBy = $payload['sort_by'] ?? 'desc';
-            $healthCenters = HealthCenter::with(['address', 'image', 'members'])
+            $healthCenters = HealthCenter::with([
+                'address',
+                'address.barangay',
+                'image',
+                'members',
+            ])
                 ->orderBy('id', $sortBy)
                 ->get();
             return customResponse()
