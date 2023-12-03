@@ -26,12 +26,13 @@ class UserController extends Controller
                 'password' => $payload['password'],
                 'level' => 'admin',
             ]);
-            $image = $payload['image'] ?? null;
+            $imagePayload = $payload['image'] ?? [];
+            $image = $imagePayload[0] ?? null;
             if (isset($image)) {
                 try {
                     $timestamp = Carbon::now()->format('YmdHisu');
                     $name = "{$user->id}_user_${timestamp}.{$image->getClientOriginalExtension()}";
-                    $path = $image->storeAs('images', $name);
+                    $path = Storage::disk('public')->putFile('images', $image);
                     $user->image()->create([
                         'name' => $name,
                         'original_name' => $image->getClientOriginalName(),
@@ -84,7 +85,7 @@ class UserController extends Controller
                 });
             }
             $users = $query
-                ->with('image')
+                ->with(['image', 'health_center_member'])
                 ->orderBy('id', $sortBy)
                 ->get();
             return customResponse()

@@ -23,6 +23,8 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'image' => 'nullable|array',
+            'image*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'first_name' => 'required|min:2|string',
             'last_name' => 'required|min:2|string',
             'birthday' => 'required|date_format:Y-m-d',
