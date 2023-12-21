@@ -27,7 +27,7 @@ class AuthController extends Controller
                     ->generate();
             }
             $accessToken = Auth::user()->createToken('authToken')->accessToken;
-            $user = User::find(Auth::id());
+            $user = User::with(['health_center_member'])->find(Auth::id());
             return customResponse()
                 ->data([
                     'access_token' => $accessToken,

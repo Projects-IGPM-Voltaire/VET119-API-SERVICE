@@ -9,6 +9,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -77,6 +78,7 @@ class UserController extends Controller
             $query = User::query();
             $healthCenterID = $payload['health_center_id'] ?? null;
             $sortBy = $payload['sort_by'] ?? 'desc';
+            $search = $payload['search'] ?? null;
             if (isset($healthCenterID)) {
                 $query->whereHas('health_center_member', function ($q) use (
                     $healthCenterID
@@ -84,6 +86,14 @@ class UserController extends Controller
                     $q->where('health_center_id', $healthCenterID);
                 });
             }
+            if (isset($search)) {
+                $query->where(
+                    DB::raw('concat(first_name, last_name)'),
+                    'like',
+                    '%' . strtolower($search) . '%'
+                );
+            }
+
             $users = $query
                 ->with(['image', 'health_center_member'])
                 ->orderBy('id', $sortBy)
