@@ -79,6 +79,7 @@ class UserController extends Controller
             $healthCenterID = $payload['health_center_id'] ?? null;
             $sortBy = $payload['sort_by'] ?? 'desc';
             $search = $payload['search'] ?? null;
+            $position = $payload['position'] ?? null;
             if (isset($healthCenterID)) {
                 $query->whereHas('health_center_member', function ($q) use (
                     $healthCenterID
@@ -92,6 +93,13 @@ class UserController extends Controller
                     'like',
                     '%' . strtolower($search) . '%'
                 );
+            }
+            if (isset($position)) {
+                $query->whereHas('health_center_member', function ($q) use (
+                    $position
+                ) {
+                    $q->where('position', $position);
+                });
             }
 
             $users = $query
