@@ -37,11 +37,19 @@ class HealthCenterController extends Controller
                     $timestamp = Carbon::now()->format('YmdHisu');
                     $name = "{$healthCenter->id}_health_center_${timestamp}.{$image->getClientOriginalExtension()}";
                     $path = Storage::disk('public')->putFile('images', $image);
+                    $filePath = storage_path("app/public/{$path}");
+                    if (file_exists($filePath)) {
+                        $sizeInKB = floatval(
+                            Storage::size("public/{$path}") / 1024
+                        );
+                    } else {
+                        $sizeInKB = 0;
+                    }
                     $healthCenter->image()->create([
                         'name' => $name,
                         'original_name' => $image->getClientOriginalName(),
                         'extension' => ".{$image->getClientOriginalExtension()}",
-                        'size' => floatval(Storage::size($path) / 1024),
+                        'size' => $sizeInKB,
                         'path' => $path,
                     ]);
                 } catch (Exception $e) {
@@ -141,8 +149,18 @@ class HealthCenterController extends Controller
                 $image = $request->file('image');
                 $timestamp = Carbon::now()->format('YmdHisu');
                 $name = "{$healthCenter->id}_health_center_${timestamp}.{$image->getClientOriginalExtension()}";
-                $path = $image->storeAs('images', $name);
-                $oldPath = $healthCenter->image->path;
+                $path = Storage::disk('public')->putFile('images', $image);
+                $filePath = storage_path("app/public/{$path}");
+                if (file_exists($filePath)) {
+                    $sizeInKB = floatval(
+                        Storage::size("public/{$path}") / 1024
+                    );
+                } else {
+                    $sizeInKB = 0;
+                }
+                $oldPath = storage_path(
+                    "app/public/{$healthCenter->image->path}"
+                );
                 $healthCenter->image()->update([
                     'name' => $name,
                     'original_name' => $image->getClientOriginalName(),
@@ -150,7 +168,7 @@ class HealthCenterController extends Controller
                     'size' => floatval(Storage::size($path) / 1024),
                     'path' => $path,
                 ]);
-                Storage::disk('local')->delete($oldPath);
+                Storage::disk('public')->delete($oldPath);
             }
 
             return customResponse()

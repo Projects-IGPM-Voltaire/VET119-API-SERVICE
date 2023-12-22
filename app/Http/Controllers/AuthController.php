@@ -54,7 +54,7 @@ class AuthController extends Controller
                 'last_name' => trim($payload['last_name']),
                 'birthday' => $payload['birthday'],
                 'mobile_number' => trim($payload['mobile_number']),
-                'password' => $payload['password'],
+                'password' => bcrypt($payload['password']),
                 'level' => $payload['level'],
             ]);
             if (isset($payload['city_code'])) {
