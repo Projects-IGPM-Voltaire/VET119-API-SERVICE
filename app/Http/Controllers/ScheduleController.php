@@ -164,4 +164,28 @@ class ScheduleController extends Controller
                 ->generate();
         }
     }
+
+    public function getByReferenceNumber($referenceNumber)
+    {
+        try {
+            $schedule = Schedule::where(
+                'reference_number',
+                $referenceNumber
+            )->first();
+            if (empty($schedule)) {
+                throw new Exception('Schedule not found');
+            }
+            return customResponse()
+                ->data($schedule)
+                ->message('Get request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->success()
+                ->generate();
+        }
+    }
 }
