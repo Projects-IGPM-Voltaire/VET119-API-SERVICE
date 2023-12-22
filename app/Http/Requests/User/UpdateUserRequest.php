@@ -26,6 +26,7 @@ class UpdateUserRequest extends FormRequest
             'first_name' => 'required|min:2|string',
             'last_name' => 'required|min:2|string',
             'birthday' => 'required|date_format:Y-m-d',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
         ];
     }
 }

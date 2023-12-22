@@ -23,8 +23,7 @@ class CreateHealthCenterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => 'nullable|array',
-            'image*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'name' => 'required|min:2|string',
             'city_code' => 'required|string',
             'barangay_code' => 'required|string',

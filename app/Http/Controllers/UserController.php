@@ -27,26 +27,17 @@ class UserController extends Controller
                 'password' => $payload['password'],
                 'level' => 'admin',
             ]);
-            $imagePayload = $payload['image'] ?? [];
-            $image = $imagePayload[0] ?? null;
+            $image = $request->file('image') ?? null;
             if (isset($image)) {
                 try {
                     $timestamp = Carbon::now()->format('YmdHisu');
                     $name = "{$user->id}_user_${timestamp}.{$image->getClientOriginalExtension()}";
                     $path = Storage::disk('public')->putFile('images', $image);
-                    $filePath = storage_path("app/public/{$path}");
-                    if (file_exists($filePath)) {
-                        $sizeInKB = floatval(
-                            Storage::size("public/{$path}") / 1024
-                        );
-                    } else {
-                        $sizeInKB = 0;
-                    }
                     $user->image()->create([
                         'name' => $name,
                         'original_name' => $image->getClientOriginalName(),
                         'extension' => ".{$image->getClientOriginalExtension()}",
-                        'size' => $sizeInKB,
+                        'size' => 0,
                         'path' => $path,
                     ]);
                 } catch (Exception $e) {
@@ -156,30 +147,18 @@ class UserController extends Controller
                 'last_name' => $payload['last_name'],
                 'birthday' => $payload['birthday'],
             ]);
-            $image = $payload['image'] ?? null;
+            $image = $request->file('image') ?? null;
             if (isset($image)) {
-                $image = $request->file('image');
                 $timestamp = Carbon::now()->format('YmdHisu');
                 $name = "{$user->id}_user_${timestamp}.{$image->getClientOriginalExtension()}";
                 $path = Storage::disk('public')->putFile('images', $image);
-                $filePath = storage_path("app/public/{$path}");
-                if (file_exists($filePath)) {
-                    $sizeInKB = floatval(
-                        Storage::size("public/{$path}") / 1024
-                    );
-                } else {
-                    $sizeInKB = 0;
-                }
-
-                $oldPath = storage_path("app/public/{$user->image->path}");
                 $user->image()->update([
                     'name' => $name,
                     'original_name' => $image->getClientOriginalName(),
                     'extension' => ".{$image->getClientOriginalExtension()}",
-                    'size' => $sizeInKB,
+                    'size' => 0,
                     'path' => $path,
                 ]);
-                Storage::disk('public')->delete($oldPath);
             }
 
             return customResponse()
