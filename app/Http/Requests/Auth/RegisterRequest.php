@@ -36,6 +36,7 @@ class RegisterRequest extends FormRequest
             'level' => 'required|string',
             'city_code' => 'required|string',
             'barangay_code' => 'required|string',
+            'health_center_id' => 'nullable|integer',
             'house_number' => 'required|string',
             'street' => 'required|string',
         ];

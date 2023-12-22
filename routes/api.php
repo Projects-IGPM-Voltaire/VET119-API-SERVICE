@@ -25,19 +25,26 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
 });
-Route::middleware(['auth:api'])
-    ->prefix('/health-center')
-    ->group(function () {
-        Route::post('/member/{id}', [
-            HealthCenterController::class,
-            'addMember',
-        ]);
-        Route::post('/', [HealthCenterController::class, 'store']);
-        Route::get('/', [HealthCenterController::class, 'index']);
-        Route::get('/{id}', [HealthCenterController::class, 'show']);
-        Route::put('/{id}', [HealthCenterController::class, 'update']);
-        Route::delete('/{id}', [HealthCenterController::class, 'destroy']);
-    });
+Route::prefix('/health-center')->group(function () {
+    Route::middleware(['auth:api'])->post('/member/{id}', [
+        HealthCenterController::class,
+        'addMember',
+    ]);
+    Route::middleware(['auth:api'])->post('/', [
+        HealthCenterController::class,
+        'store',
+    ]);
+    Route::get('/', [HealthCenterController::class, 'index']);
+    Route::get('/{id}', [HealthCenterController::class, 'show']);
+    Route::middleware(['auth:api'])->put('/{id}', [
+        HealthCenterController::class,
+        'update',
+    ]);
+    Route::middleware(['auth:api'])->delete('/{id}', [
+        HealthCenterController::class,
+        'destroy',
+    ]);
+});
 Route::middleware(['auth:api'])
     ->prefix('/user')
     ->group(function () {

@@ -172,7 +172,6 @@ class UserController extends Controller
                 }
 
                 $oldPath = storage_path("app/public/{$user->image->path}");
-                info($oldPath);
                 $user->image()->update([
                     'name' => $name,
                     'original_name' => $image->getClientOriginalName(),

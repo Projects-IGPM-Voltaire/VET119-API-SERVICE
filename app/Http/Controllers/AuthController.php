@@ -65,6 +65,16 @@ class AuthController extends Controller
                     'street' => $payload['street'] ?? null,
                 ]);
             }
+            if (
+                isset($payload['health_center_id']) &&
+                $payload['level'] === 'guest'
+            ) {
+                $user->health_center_member()->create([
+                    'user_id' => $user->id,
+                    'health_center_id' => $payload['health_center_id'],
+                    'position' => 'patient',
+                ]);
+            }
 
             return customResponse()
                 ->data($user)

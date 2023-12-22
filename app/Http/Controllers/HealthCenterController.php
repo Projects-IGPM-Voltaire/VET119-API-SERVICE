@@ -81,6 +81,7 @@ class HealthCenterController extends Controller
             $payload = $request->all();
             $sortBy = $payload['sort_by'] ?? 'desc';
             $search = $payload['search'] ?? null;
+            $barangay_code = $payload['code'] ?? null;
             $query = HealthCenter::query();
             if (isset($search)) {
                 $query->where(
@@ -88,6 +89,15 @@ class HealthCenterController extends Controller
                     'like',
                     '%' . strtolower($search) . '%'
                 );
+            }
+            if (isset($barangay_code)) {
+                $query->whereHas('address', function ($q) use ($barangay_code) {
+                    $q->whereHas('barangay', function ($q2) use (
+                        $barangay_code
+                    ) {
+                        $q2->where('code', $barangay_code);
+                    });
+                });
             }
             $healthCenters = $query
                 ->with(['address', 'address.barangay', 'image', 'members'])
