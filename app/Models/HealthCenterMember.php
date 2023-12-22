@@ -17,4 +17,9 @@ class HealthCenterMember extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function center(): BelongsTo
+    {
+        return $this->belongsTo(HealthCenter::class, 'health_center_id', 'id');
+    }
 }

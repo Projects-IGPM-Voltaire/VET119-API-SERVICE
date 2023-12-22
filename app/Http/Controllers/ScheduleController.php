@@ -9,6 +9,7 @@ use App\Models\Schedule;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ScheduleController extends Controller
 {
@@ -82,11 +83,27 @@ class ScheduleController extends Controller
             $healthCenterID = $payload['health_center_id'] ?? null;
             $userID = $payload['user_id'] ?? null;
             $sortBy = $payload['sort_by'] ?? 'desc';
+            $conditions = $payload['conditions'] ?? [];
             if (isset($healthCenterID)) {
                 $query->where('health_center_id', $healthCenterID);
             }
             if (isset($userID)) {
                 $query->where('user_id', $userID);
+            }
+            if (!empty($conditions)) {
+                foreach ($conditions as $condition) {
+                    if ($condition === 'today') {
+                        $now = Carbon::now();
+                        $query
+                            ->whereDate('date', $now->toDateString())
+                            ->orderBy('id', 'desc');
+                    } elseif ($condition === 'tomorrow') {
+                        $now = Carbon::now()->addDay();
+                        $query
+                            ->whereDate('date', $now->toDateString())
+                            ->orderBy('id', 'desc');
+                    }
+                }
             }
             $schedules = $query->orderBy('id', $sortBy)->get();
             return customResponse()
