@@ -27,7 +27,7 @@ return new class extends Migration {
                 ->onDelete('cascade');
             $table->string('house_number')->nullable();
             $table->string('street')->nullable();
-            $table->string('map_url')->nullable();
+            $table->text('map_url')->nullable();
             $table->timestamps();
 
             $table

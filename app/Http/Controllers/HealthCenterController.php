@@ -47,6 +47,7 @@ class HealthCenterController extends Controller
                     throw new Exception($e->getMessage());
                 }
             }
+            $healthCenter->operation_hour()->create([]);
 
             return customResponse()
                 ->data($healthCenter)

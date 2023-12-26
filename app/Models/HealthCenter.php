@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class HealthCenter extends Model
 {
@@ -36,5 +38,10 @@ class HealthCenter extends Model
             'health_center_id',
             'id'
         );
+    }
+
+    public function operation_hour(): HasOne
+    {
+        return $this->hasOne(OperationHour::class, 'health_center_id', 'id');
     }
 }
