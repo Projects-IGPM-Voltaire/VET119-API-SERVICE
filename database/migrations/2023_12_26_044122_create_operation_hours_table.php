@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('operation_hours', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('health_center_id');
-            $table->time('time_from')->default('08:00');
-            $table->time('time_to')->default('18:00');
+            $table->time('time_from')->default('08:00:00');
+            $table->time('time_to')->default('18:00:00');
             $table->timestamps();
 
             $table

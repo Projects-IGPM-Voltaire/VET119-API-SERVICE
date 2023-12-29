@@ -248,4 +248,22 @@ class HealthCenterController extends Controller
                 ->generate();
         }
     }
+
+    public function getOperationHours($id)
+    {
+        try {
+            $healthCenter = HealthCenter::findorFail($id);
+            return customResponse()
+                ->data($healthCenter->operation_hour ?? null)
+                ->message('Delete request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->success()
+                ->generate();
+        }
+    }
 }

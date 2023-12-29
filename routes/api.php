@@ -44,6 +44,7 @@ Route::prefix('/health-center')->group(function () {
         HealthCenterController::class,
         'destroy',
     ]);
+    Route::get('/operation-hour/{id}', [HealthCenterController::class, 'getOperationHours']);
 });
 Route::middleware(['auth:api'])
     ->prefix('/user')
