@@ -44,10 +44,19 @@ Route::prefix('/health-center')->group(function () {
         HealthCenterController::class,
         'destroy',
     ]);
-    Route::get('/operation-hour/{id}', [HealthCenterController::class, 'getOperationHours']);
+    Route::prefix('operation-hour')->group(function () {
+        Route::get('/{id}', [
+            HealthCenterController::class,
+            'getOperationHours',
+        ]);
+        Route::put('/{id}', [
+            HealthCenterController::class,
+            'updateOperationHours',
+        ]);
+    });
 });
 Route::middleware(['auth:api'])
-    ->prefix('/user')
+    ->prefix('user')
     ->group(function () {
         Route::post('/', [UserController::class, 'store']);
         Route::get('/', [UserController::class, 'index']);
@@ -56,7 +65,7 @@ Route::middleware(['auth:api'])
         Route::delete('/{id}', [UserController::class, 'destroy']);
     });
 Route::middleware(['auth:api'])
-    ->prefix('/schedule')
+    ->prefix('schedule')
     ->group(function () {
         Route::post('/', [ScheduleController::class, 'store']);
         Route::get('/reference-number/{referenceNumber}', [

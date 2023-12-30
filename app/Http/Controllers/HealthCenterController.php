@@ -266,4 +266,27 @@ class HealthCenterController extends Controller
                 ->generate();
         }
     }
+
+    public function updateOperationHours(Request $request, $id)
+    {
+        try {
+            $healthCenter = HealthCenter::findorFail($id);
+            $payload = $request->all();
+            $healthCenter->operation_hour()->update([
+                'time_from' => $payload['time_from'],
+                'time_to' => $payload['time_to'],
+            ]);
+            return customResponse()
+                ->data($healthCenter->operation_hour ?? null)
+                ->message('Update request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->success()
+                ->generate();
+        }
+    }
 }
