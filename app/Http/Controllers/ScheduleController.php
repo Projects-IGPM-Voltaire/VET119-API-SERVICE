@@ -94,8 +94,19 @@ class ScheduleController extends Controller
                 foreach ($conditions as $condition) {
                     if ($condition === 'today') {
                         $now = Carbon::now();
+                        $nextThreeHours = $now->copy()->addHours(3);
+                        info($now->format('Y-m-d H:00:00'));
+                        info($nextThreeHours->format('Y-m-d H:00:00'));
                         $query
                             ->whereDate('date', $now->toDateString())
+                            ->whereBetween('time_from', [
+                                $now->format('Y-m-d H:00:00'),
+                                $nextThreeHours->format('Y-m-d H:00:00'),
+                            ])
+                            ->whereBetween('time_to', [
+                                $now->format('Y-m-d H:00:00'),
+                                $nextThreeHours->format('Y-m-d H:00:00'),
+                            ])
                             ->orderBy('id', 'desc');
                     } elseif ($condition === 'tomorrow') {
                         $now = Carbon::now()->addDay();
