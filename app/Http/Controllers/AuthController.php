@@ -30,6 +30,7 @@ class AuthController extends Controller
             $user = User::with([
                 'health_center_member',
                 'health_center_member.center',
+                'health_center_member.center.address.barangay',
             ])->find(Auth::id());
             return customResponse()
                 ->data([
