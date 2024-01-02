@@ -92,7 +92,14 @@ class HealthCenterController extends Controller
                 });
             }
             $healthCenters = $query
-                ->with(['address', 'address.barangay', 'image', 'members'])
+                ->with([
+                    'address',
+                    'address.barangay',
+                    'image',
+                    'members',
+                    'members.user',
+                    'members.user.image',
+                ])
                 ->orderBy('id', $sortBy)
                 ->get();
             return customResponse()
