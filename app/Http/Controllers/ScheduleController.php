@@ -92,26 +92,37 @@ class ScheduleController extends Controller
             }
             if (!empty($conditions)) {
                 foreach ($conditions as $condition) {
-                    if ($condition === 'today') {
+                    if ($condition === 'upcoming') {
                         $now = Carbon::now();
-                        $nextThreeHours = $now->copy()->addHours(3);
-                        info($now->format('Y-m-d H:00:00'));
-                        info($nextThreeHours->format('Y-m-d H:00:00'));
+                        $currentHour = $now->copy()->addHours(2);
+                        $nextThreeHours = $now->copy()->addHours(4);
                         $query
-                            ->whereDate('date', $now->toDateString())
-                            ->whereBetween('time_from', [
-                                $now->format('Y-m-d H:00:00'),
-                                $nextThreeHours->format('Y-m-d H:00:00'),
-                            ])
-                            ->whereBetween('time_to', [
-                                $now->format('Y-m-d H:00:00'),
-                                $nextThreeHours->format('Y-m-d H:00:00'),
-                            ])
+                            ->whereTime(
+                                'time_from',
+                                '>=',
+                                $currentHour->format('Y-m-d H:00:00')
+                            )
+                            ->whereTime(
+                                'time_from',
+                                '<=',
+                                $nextThreeHours->format('Y-m-d H:00:00')
+                            )
                             ->orderBy('id', 'desc');
-                    } elseif ($condition === 'tomorrow') {
-                        $now = Carbon::now()->addDay();
+                    } elseif ($condition === 'ongoing') {
+                        $now = Carbon::now();
+                        $currentHour = $now->copy()->addHours(1);
                         $query
                             ->whereDate('date', $now->toDateString())
+                            ->whereTime(
+                                'time_from',
+                                '>=',
+                                $now->format('Y-m-d H:00:00')
+                            )
+                            ->whereTime(
+                                'time_from',
+                                '<=',
+                                $currentHour->format('Y-m-d H:00:00')
+                            )
                             ->orderBy('id', 'desc');
                     }
                 }
