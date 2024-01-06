@@ -65,7 +65,7 @@ class UserController extends Controller
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -114,7 +114,7 @@ class UserController extends Controller
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -132,7 +132,7 @@ class UserController extends Controller
             return customResponse()
                 ->data($e->getMessage())
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -170,7 +170,7 @@ class UserController extends Controller
             return customResponse()
                 ->data($e->getMessage())
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -190,7 +190,7 @@ class UserController extends Controller
             return customResponse()
                 ->data($e->getMessage())
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }

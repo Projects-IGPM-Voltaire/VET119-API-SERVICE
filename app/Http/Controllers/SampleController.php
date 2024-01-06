@@ -22,7 +22,7 @@ class SampleController extends Controller
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }

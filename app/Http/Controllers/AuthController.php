@@ -44,7 +44,7 @@ class AuthController extends Controller
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -89,7 +89,7 @@ class AuthController extends Controller
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }

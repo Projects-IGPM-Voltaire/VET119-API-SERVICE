@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -70,7 +71,7 @@ class ScheduleController extends Controller
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -137,7 +138,7 @@ class ScheduleController extends Controller
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -155,7 +156,7 @@ class ScheduleController extends Controller
             return customResponse()
                 ->data($e->getMessage())
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -180,7 +181,7 @@ class ScheduleController extends Controller
             return customResponse()
                 ->data($e->getMessage())
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -199,7 +200,7 @@ class ScheduleController extends Controller
             return customResponse()
                 ->data($e->getMessage())
                 ->message($e->getMessage())
-                ->success()
+                ->failed()
                 ->generate();
         }
     }
@@ -223,7 +224,39 @@ class ScheduleController extends Controller
             return customResponse()
                 ->data($e->getMessage())
                 ->message($e->getMessage())
+                ->failed()
+                ->generate();
+        }
+    }
+
+    public function hasSchedule()
+    {
+        try {
+            $userID = Auth::id();
+            $schedule = Schedule::where('user_id', $userID)
+                ->whereDate('created_at', today())
+                ->first();
+            if (empty($schedule)) {
+                return customResponse()
+                    ->data([
+                        'has_schedule' => false,
+                    ])
+                    ->message('Get request done.')
+                    ->success()
+                    ->generate();
+            }
+            return customResponse()
+                ->data([
+                    'has_schedule' => true,
+                ])
+                ->message('Get request done.')
                 ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->failed()
                 ->generate();
         }
     }

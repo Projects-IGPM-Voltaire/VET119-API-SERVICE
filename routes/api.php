@@ -68,12 +68,13 @@ Route::middleware(['auth:api'])
     ->prefix('schedule')
     ->group(function () {
         Route::post('/', [ScheduleController::class, 'store']);
+        Route::get('/check', [ScheduleController::class, 'hasSchedule']);
         Route::get('/reference-number/{referenceNumber}', [
             ScheduleController::class,
             'getByReferenceNumber',
         ]);
-        Route::get('/', [ScheduleController::class, 'index']);
         Route::get('/{id}', [ScheduleController::class, 'show']);
+        Route::get('/', [ScheduleController::class, 'index']);
         Route::put('/{id}', [ScheduleController::class, 'update']);
         Route::delete('/{id}', [ScheduleController::class, 'destroy']);
     });
