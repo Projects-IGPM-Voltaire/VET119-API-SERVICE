@@ -240,6 +240,7 @@ class ScheduleController extends Controller
                 return customResponse()
                     ->data([
                         'has_schedule' => false,
+                        'schedule' => null,
                     ])
                     ->message('Get request done.')
                     ->success()
@@ -248,6 +249,7 @@ class ScheduleController extends Controller
             return customResponse()
                 ->data([
                     'has_schedule' => true,
+                    'schedule' => $schedule,
                 ])
                 ->message('Get request done.')
                 ->success()
