@@ -98,6 +98,7 @@ class ScheduleController extends Controller
                         $currentHour = $now->copy()->addHours(2);
                         $nextThreeHours = $now->copy()->addHours(4);
                         $query
+                            ->whereDate('date', $now->toDateString())
                             ->whereTime(
                                 'time_from',
                                 '>=',
