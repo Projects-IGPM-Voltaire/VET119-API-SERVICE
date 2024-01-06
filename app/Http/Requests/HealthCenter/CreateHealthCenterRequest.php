@@ -29,7 +29,7 @@ class CreateHealthCenterRequest extends FormRequest
             'barangay_code' => 'required|string',
             'house_number' => 'required|string',
             'street' => 'required|string',
-            'map_url' => 'required|string',
+            'map_url' => 'required|url',
         ];
     }
 }
