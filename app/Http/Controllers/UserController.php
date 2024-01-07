@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\ResetUserPasswordRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\HealthCenter;
 use App\Models\User;
@@ -184,6 +185,27 @@ class UserController extends Controller
             return customResponse()
                 ->data($user)
                 ->message('Delete request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->failed()
+                ->generate();
+        }
+    }
+
+    public function resetPassword(ResetUserPasswordRequest $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->update([
+                'password' => bcrypt($request->input('password')),
+            ]);
+            return customResponse()
+                ->data($user)
+                ->message('Reset password done.')
                 ->success()
                 ->generate();
         } catch (Exception $e) {

@@ -59,6 +59,10 @@ Route::middleware(['auth:api'])
     ->prefix('user')
     ->group(function () {
         Route::post('/', [UserController::class, 'store']);
+        Route::post('/reset-password/{id}', [
+            UserController::class,
+            'resetPassword',
+        ]);
         Route::get('/', [UserController::class, 'index']);
         Route::get('/{id}', [UserController::class, 'show']);
         Route::put('/{id}', [UserController::class, 'update']);
