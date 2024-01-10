@@ -29,7 +29,7 @@ class ScheduleController extends Controller
                 ->whereDate('created_at', today())
                 ->get()
                 ->count();
-            $patientNumber = sprintf('%04d', $todayScheduleCount);
+            $patientNumber = sprintf('%04d', intval($todayScheduleCount) + 1);
             $barangay = strtoupper(
                 $healthCenter->address->barangay->name ?? 'barangay'
             );
