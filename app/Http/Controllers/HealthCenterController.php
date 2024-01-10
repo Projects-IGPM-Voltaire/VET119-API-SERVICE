@@ -152,6 +152,7 @@ class HealthCenterController extends Controller
                 'barangay_code' => $payload['barangay_code'],
                 'house_number' => $payload['house_number'],
                 'street' => $payload['street'],
+                'map_url' => $payload['map_url'],
             ]);
             $image = $payload['image'] ?? null;
             if (isset($image)) {

@@ -24,11 +24,11 @@ class UpdateHealthCenterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:100',
-            'image' => 'required|image|mimes:jpeg,png',
             'city_code' => 'required|integer',
             'barangay_code' => 'required|string',
             'house_number' => 'nullable|string',
             'street' => 'nullable|string',
+            'map_url' => 'nullable|string',
         ];
     }
 }
