@@ -26,7 +26,7 @@ class ScheduleController extends Controller
                 'health_center_id',
                 $healthCenterID
             )
-                ->whereDate('created_at', $payload['date'])
+                ->whereDate('date', $payload['date'])
                 ->get()
                 ->count();
             if ($targetScheduleCount >= $healthCenter->limit) {
