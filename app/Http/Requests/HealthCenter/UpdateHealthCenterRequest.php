@@ -27,6 +27,7 @@ class UpdateHealthCenterRequest extends FormRequest
             'city_code' => 'required|integer',
             'barangay_code' => 'required|string',
             'house_number' => 'nullable|string',
+            'limit' => 'required|integer|between:1,50',
             'street' => 'nullable|string',
             'map_url' => 'nullable|string',
         ];

@@ -22,6 +22,7 @@ class HealthCenterController extends Controller
             $payload = $request->all();
             $healthCenter = HealthCenter::create([
                 'name' => $payload['name'],
+                'limit' => 25,
             ]);
             $healthCenter->address()->create([
                 'city_code' => $payload['city_code'],
@@ -146,6 +147,7 @@ class HealthCenterController extends Controller
             $healthCenter = HealthCenter::findOrFail($id);
             $healthCenter->update([
                 'name' => $payload['name'],
+                'limit' => $payload['limit'],
             ]);
             $healthCenter->address()->update([
                 'city_code' => $payload['city_code'],
