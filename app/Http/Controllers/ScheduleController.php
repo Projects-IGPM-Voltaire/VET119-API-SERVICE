@@ -22,6 +22,18 @@ class ScheduleController extends Controller
             $userID = $payload['user_id'] ?? null;
             $healthCenterID = $payload['health_center_id'];
             $healthCenter = HealthCenter::findOrFail($healthCenterID);
+            $targetScheduleCount = Schedule::where(
+                'health_center_id',
+                $healthCenterID
+            )
+                ->whereDate('created_at', $payload['date'])
+                ->get()
+                ->count();
+            if ($targetScheduleCount >= $healthCenter->limit) {
+                throw new Exception(
+                    "The health center's appointment limit for target date has already been reached."
+                );
+            }
             $todayScheduleCount = Schedule::where(
                 'health_center_id',
                 $healthCenterID
@@ -29,11 +41,6 @@ class ScheduleController extends Controller
                 ->whereDate('created_at', today())
                 ->get()
                 ->count();
-            if ($todayScheduleCount >= $healthCenter->limit) {
-                throw new Exception(
-                    "The health center's appointment limit for today has already been reached."
-                );
-            }
             $patientNumber = sprintf('%04d', intval($todayScheduleCount) + 1);
             $barangay = strtoupper(
                 $healthCenter->address->barangay->name ?? 'barangay'
