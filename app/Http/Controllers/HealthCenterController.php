@@ -122,9 +122,11 @@ class HealthCenterController extends Controller
         try {
             $healthCenter = HealthCenter::with([
                 'address',
+                'address.barangay',
                 'image',
                 'members',
                 'members.user',
+                'members.user.image',
             ])->findOrFail($id);
             return customResponse()
                 ->data($healthCenter)
