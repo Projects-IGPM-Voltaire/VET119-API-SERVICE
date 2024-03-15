@@ -14,14 +14,14 @@ return new class extends Migration {
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->date('birthday');
+            $table->string('email')->unique();
             $table->string('mobile_number')->unique();
             $table->string('password');
+            $table->date('birthday');
             $table->string('level');
-            $table->rememberToken();
-            $table->timestamps();
-            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamps();
+            $table->rememberToken();
         });
     }
 
