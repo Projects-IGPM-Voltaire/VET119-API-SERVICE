@@ -20,6 +20,7 @@ class DefaultSuperAdminSeeder extends Seeder
             'birthday' => '2000-05-21',
             'mobile_number' => '09972217704',
             'password' => 'password',
+            'email' => 'chestertan321@gmail.com'
         ];
 
         try {
@@ -30,6 +31,7 @@ class DefaultSuperAdminSeeder extends Seeder
                 'mobile_number' => $payload['mobile_number'],
                 'password' => bcrypt($payload['password']),
                 'level' => 'superadmin',
+                'email' => $payload['email']
             ]);
         } catch (Exception $e) {
             info($e->getMessage());

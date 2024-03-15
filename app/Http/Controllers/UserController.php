@@ -27,6 +27,7 @@ class UserController extends Controller
                 'mobile_number' => $payload['mobile_number'],
                 'password' => $payload['password'],
                 'level' => 'admin',
+                'email' => 'hello@example.com'
             ]);
             $image = $request->file('image') ?? null;
             if (isset($image)) {

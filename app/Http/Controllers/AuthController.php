@@ -7,6 +7,8 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+
 
 class AuthController extends Controller
 {
@@ -60,6 +62,7 @@ class AuthController extends Controller
                 'mobile_number' => trim($payload['mobile_number']),
                 'password' => bcrypt($payload['password']),
                 'level' => $payload['level'],
+                'email' => 'rey.tan@student.ateneo.edu'
             ]);
             if (isset($payload['city_code'])) {
                 $user->address()->create([
@@ -79,7 +82,7 @@ class AuthController extends Controller
                     'position' => 'patient',
                 ]);
             }
-
+            event(new Registered($user));
             return customResponse()
                 ->data($user)
                 ->message('Operation success.')
