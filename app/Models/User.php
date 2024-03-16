@@ -34,19 +34,4 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Pets::class);
     }
-
-    public function image(): MorphOne
-    {
-        return $this->morphOne(Image::class, 'imageable');
-    }
-
-    public function address(): HasOne
-    {
-        return $this->hasOne(UserAddress::class, 'user_id', 'id');
-    }
-
-    public function health_center_member(): BelongsTo
-    {
-        return $this->belongsTo(HealthCenterMember::class, 'id', 'user_id');
-    }
 }
