@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name');
             $table->string('species');
-            $table->string('breed');
+            $table->string('breed')->nullable();
             $table->timestamps();
 
             $table
