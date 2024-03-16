@@ -23,35 +23,10 @@ class UserController extends Controller
             $user = User::create([
                 'first_name' => $payload['first_name'],
                 'last_name' => $payload['last_name'],
-                'birthday' => $payload['birthday'],
                 'mobile_number' => $payload['mobile_number'],
                 'password' => $payload['password'],
                 'level' => 'admin',
-                'email' => 'hello@example.com'
-            ]);
-            $image = $request->file('image') ?? null;
-            if (isset($image)) {
-                try {
-                    $timestamp = Carbon::now()->format('YmdHisu');
-                    $name = "{$user->id}_user_${timestamp}.{$image->getClientOriginalExtension()}";
-                    $path = Storage::disk('public')->putFile('images', $image);
-                    $user->image()->create([
-                        'name' => $name,
-                        'original_name' => $image->getClientOriginalName(),
-                        'extension' => ".{$image->getClientOriginalExtension()}",
-                        'size' => 0,
-                        'path' => $path,
-                    ]);
-                } catch (Exception $e) {
-                    throw new Exception($e->getMessage());
-                }
-            }
-            $healthCenter = HealthCenter::findorFail(
-                $payload['health_center_id']
-            );
-            $healthCenter->members()->create([
-                'user_id' => $user->id,
-                'position' => $payload['position'],
+                'email' => $payload['email'],
             ]);
 
             return customResponse()
@@ -60,10 +35,6 @@ class UserController extends Controller
                 ->success()
                 ->generate();
         } catch (Exception $e) {
-            if (isset($user)) {
-                $user->image()->delete();
-                $user->delete();
-            }
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
@@ -77,17 +48,8 @@ class UserController extends Controller
         try {
             $payload = $request->all();
             $query = User::query();
-            $healthCenterID = $payload['health_center_id'] ?? null;
             $sortBy = $payload['sort_by'] ?? 'desc';
             $search = $payload['search'] ?? null;
-            $position = $payload['position'] ?? null;
-            if (isset($healthCenterID)) {
-                $query->whereHas('health_center_member', function ($q) use (
-                    $healthCenterID
-                ) {
-                    $q->where('health_center_id', $healthCenterID);
-                });
-            }
             if (isset($search)) {
                 $query->where(
                     DB::raw('concat(first_name, last_name)'),
@@ -95,16 +57,8 @@ class UserController extends Controller
                     '%' . strtolower($search) . '%'
                 );
             }
-            if (isset($position)) {
-                $query->whereHas('health_center_member', function ($q) use (
-                    $position
-                ) {
-                    $q->where('position', $position);
-                });
-            }
 
             $users = $query
-                ->with(['image', 'health_center_member'])
                 ->orderBy('id', $sortBy)
                 ->get();
             return customResponse()
@@ -124,7 +78,7 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = User::with('image')->findOrFail($id);
+            $user = User::findOrFail($id);
             return customResponse()
                 ->data($user)
                 ->message('Get request done.')
@@ -147,24 +101,11 @@ class UserController extends Controller
             $user->update([
                 'first_name' => $payload['first_name'],
                 'last_name' => $payload['last_name'],
-                'birthday' => $payload['birthday'],
+                'mobile_number' => $payload['mobile_number']
             ]);
-            $image = $request->file('image') ?? null;
-            if (isset($image)) {
-                $timestamp = Carbon::now()->format('YmdHisu');
-                $name = "{$user->id}_user_${timestamp}.{$image->getClientOriginalExtension()}";
-                $path = Storage::disk('public')->putFile('images', $image);
-                $user->image()->update([
-                    'name' => $name,
-                    'original_name' => $image->getClientOriginalName(),
-                    'extension' => ".{$image->getClientOriginalExtension()}",
-                    'size' => 0,
-                    'path' => $path,
-                ]);
-            }
 
             return customResponse()
-                ->data($user->load('image'))
+                ->data($user)
                 ->message('Update request done.')
                 ->success()
                 ->generate();
@@ -181,7 +122,6 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $user->image()->delete();
             $user->delete();
             return customResponse()
                 ->data($user)

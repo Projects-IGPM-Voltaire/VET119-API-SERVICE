@@ -25,7 +25,6 @@ class RegisterRequest extends FormRequest
         return [
             'first_name' => 'required|min:2|string',
             'last_name' => 'required|min:2|string',
-            'birthday' => 'required|date_format:Y-m-d',
             'mobile_number' => [
                 'required',
                 'regex:/^(09)\d{9}$/',
@@ -34,11 +33,11 @@ class RegisterRequest extends FormRequest
             'password' => 'required|min:6|required_with:password_confirmation',
             'password_confirmation' => 'same:password',
             'level' => 'required|string',
-            'city_code' => 'required|string',
-            'barangay_code' => 'required|string',
-            'health_center_id' => 'nullable|integer',
-            'house_number' => 'required|string',
-            'street' => 'required|string',
+            'email' => [
+                'required',
+                'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+                'unique:users,email',
+            ],
         ];
     }
 }

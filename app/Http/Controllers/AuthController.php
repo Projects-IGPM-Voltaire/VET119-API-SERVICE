@@ -18,7 +18,7 @@ class AuthController extends Controller
             $payload = $request->all();
             if (
                 !Auth::attempt([
-                    'mobile_number' => $payload['username'],
+                    'email' => $payload['email'],
                     'password' => $payload['password'],
                 ])
             ) {
@@ -29,11 +29,7 @@ class AuthController extends Controller
                     ->generate();
             }
             $accessToken = Auth::user()->createToken('authToken')->accessToken;
-            $user = User::with([
-                'health_center_member',
-                'health_center_member.center',
-                'health_center_member.center.address.barangay',
-            ])->find(Auth::id());
+            $user = User::find(Auth::id());
             return customResponse()
                 ->data([
                     'access_token' => $accessToken,
@@ -58,30 +54,11 @@ class AuthController extends Controller
             $user = User::create([
                 'first_name' => trim($payload['first_name']),
                 'last_name' => trim($payload['last_name']),
-                'birthday' => $payload['birthday'],
                 'mobile_number' => trim($payload['mobile_number']),
                 'password' => bcrypt($payload['password']),
                 'level' => $payload['level'],
-                'email' => 'rey.tan@student.ateneo.edu'
+                'email' => $payload['email'],
             ]);
-            if (isset($payload['city_code'])) {
-                $user->address()->create([
-                    'city_code' => $payload['city_code'],
-                    'barangay_code' => $payload['barangay_code'] ?? null,
-                    'house_number' => $payload['house_number'] ?? null,
-                    'street' => $payload['street'] ?? null,
-                ]);
-            }
-            if (
-                isset($payload['health_center_id']) &&
-                $payload['level'] === 'guest'
-            ) {
-                $user->health_center_member()->create([
-                    'user_id' => $user->id,
-                    'health_center_id' => $payload['health_center_id'],
-                    'position' => 'patient',
-                ]);
-            }
             event(new Registered($user));
             return customResponse()
                 ->data($user)
