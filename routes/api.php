@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ReferenceController;
 use App\Http\Controllers\PetController;
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\EmailVerificationController;
 
@@ -90,6 +91,12 @@ Route::middleware(['auth:api'])
     ->prefix('pet')
     ->group(function () {
         Route::post('/', [PetController::class, 'store']);
+    });
+
+Route::middleware(['auth:api'])
+    ->prefix('appointment')
+    ->group(function () {
+        Route::post('/', [AppointmentController::class, 'store']);
     });
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
