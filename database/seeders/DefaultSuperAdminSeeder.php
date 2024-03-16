@@ -15,23 +15,22 @@ class DefaultSuperAdminSeeder extends Seeder
     public function run(): void
     {
         $payload = [
-            'first_name' => 'Sebastian Curtis',
-            'last_name' => 'Lavarias',
-            'birthday' => '2000-05-21',
-            'mobile_number' => '09972217704',
+            'first_name' => 'Chester',
+            'last_name' => 'Tan',
+            'mobile_number' => '09171529122',
             'password' => 'password',
-            'email' => 'chestertan321@gmail.com'
+            'email' => 'rey.tan@student.ateneo.edu'
         ];
 
         try {
             User::create([
                 'first_name' => $payload['first_name'],
                 'last_name' => $payload['last_name'],
-                'birthday' => $payload['birthday'],
                 'mobile_number' => $payload['mobile_number'],
                 'password' => bcrypt($payload['password']),
-                'level' => 'superadmin',
-                'email' => $payload['email']
+                'level' => 'admin',
+                'email' => $payload['email'],
+                'email_verified_at' => now()
             ]);
         } catch (Exception $e) {
             info($e->getMessage());
