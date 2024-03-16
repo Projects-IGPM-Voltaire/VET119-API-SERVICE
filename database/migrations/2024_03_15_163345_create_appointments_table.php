@@ -16,10 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('purpose');
             $table->date('date');
             $table->time('time_from');
             $table->time('time_to');
-            $table->string('patient_number');
             $table->string('reference_number');
             $table->timestamps();
 
