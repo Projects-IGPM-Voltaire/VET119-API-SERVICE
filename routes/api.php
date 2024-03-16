@@ -6,6 +6,7 @@ use App\Http\Controllers\HealthCenterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ReferenceController;
+use App\Http\Controllers\PetController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\EmailVerificationController;
 
@@ -83,6 +84,12 @@ Route::middleware(['auth:api'])
         Route::get('/', [ScheduleController::class, 'index']);
         Route::put('/{id}', [ScheduleController::class, 'update']);
         Route::delete('/{id}', [ScheduleController::class, 'destroy']);
+    });
+
+Route::middleware(['auth:api'])
+    ->prefix('pet')
+    ->group(function () {
+        Route::post('/', [PetController::class, 'store']);
     });
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
