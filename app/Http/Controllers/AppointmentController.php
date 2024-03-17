@@ -25,6 +25,7 @@ class AppointmentController extends Controller
             $currentDate = new \DateTime($payload['date']);
             $currentDate = $currentDate->format('mdy');
             $authID = Auth::id();
+            $user = User::findOrFail($authID);
             $userID = sprintf('%04d', intval($authID));
             $referenceNumber = "{$currentDate}-{$userID}-{$patientNumber}";
 
@@ -34,7 +35,9 @@ class AppointmentController extends Controller
                 'time_from' => $payload['time_from'],
                 'time_to' => $payload['time_to'],
                 'user_id' => $authID,
-                'reference_number' => $referenceNumber
+                'reference_number' => $referenceNumber,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name
             ]);
 
             $petPayload = $payload['pets'];
@@ -67,7 +70,7 @@ class AppointmentController extends Controller
     {
         try {
             $payload = $request->all();
-            $query = Appointment::with('pets')->withCount('pets');
+            $query = Appointment::with('user')->with('pets')->withCount('pets');
             $userID = Auth::id();
             $query->where('user_id', $userID);
             $condition = $payload['condition'] ?? null;
