@@ -131,4 +131,86 @@ class AppointmentController extends Controller
         }
     }
 
+    public function filter(Request $request)
+    {
+        try {
+            $payload = $request->all();
+            $query = Appointment::with('pets')->withCount('pets');
+
+            if (isset($payload['search']))
+            {
+                $searchTerm = '%' . $payload['search'] . '%';
+                if (preg_match('~[0-9]+~', $searchTerm))
+                {
+                    $query->where('reference_number', 'like', $searchTerm);
+                }
+                else
+                {
+                    $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", [$searchTerm]);
+                }
+            }
+
+            if (isset($payload['date_from']))
+            {
+                $query->whereDate(
+                    'date',
+                    '>=',
+                    $payload['date_from']
+                );
+            }
+
+            if (isset($payload['date_to']))
+            {
+                $query->whereDate(
+                    'date',
+                    '<=',
+                    $payload['date_to']
+                );
+            }
+
+            if (isset($payload['time_from']))
+            {
+                $query->whereTime(
+                    'time_from',
+                    '>=',
+                    $payload['time_from']
+                );
+            }
+
+            if (isset($payload['time_to']))
+            {
+                $query->whereTime(
+                    'time_from',
+                    '<=',
+                    $payload['time_to']
+                );
+            }
+
+            if (isset($payload['purpose']))
+            {
+                $query->where(
+                    'purpose',
+                    'like',
+                    $payload['purpose']
+                );
+            }
+
+
+
+            $appointments = $query->get();
+
+            return customResponse()
+                ->data($appointments)
+                ->message('Get request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->failed()
+                ->generate();
+        }
+    }
+
 }
