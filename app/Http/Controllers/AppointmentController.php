@@ -67,7 +67,7 @@ class AppointmentController extends Controller
     {
         try {
             $payload = $request->all();
-            $query = Appointment::query();
+            $query = Appointment::with('pets')->withCount('pets');
             $userID = Auth::id();
             $query->where('user_id', $userID);
             $condition = $payload['condition'] ?? null;
@@ -113,7 +113,7 @@ class AppointmentController extends Controller
     public function show($id)
     {
         try {
-            $appointment = Appointment::findOrFail($id);
+            $appointment = Appointment::with('pets')->withCount('pets')->findOrFail($id);
             return customResponse()
                 ->data($appointment)
                 ->message('Get request done.')
