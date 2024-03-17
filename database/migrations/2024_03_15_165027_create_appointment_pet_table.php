@@ -15,6 +15,18 @@ return new class extends Migration
             $table->unsignedBigInteger('appointment_id');
             $table->unsignedBigInteger('pet_id');
             $table->timestamps();
+
+            $table
+                ->foreign('appointment_id')
+                ->references('id')
+                ->on('appointments')
+                ->onDelete('cascade');
+
+            $table
+                ->foreign('pet_id')
+                ->references('id')
+                ->on('pets')
+                ->onDelete('cascade');
         });
     }
 
