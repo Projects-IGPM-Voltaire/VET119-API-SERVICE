@@ -23,7 +23,7 @@ class AppointmentController extends Controller
                 ->count();
             $patientNumber = sprintf('%04d', intval($todayAppointmentCount) + 1);
             $currentDate = new \DateTime($payload['date']);
-            $currentDate = $currentDate->format('ymd');
+            $currentDate = $currentDate->format('mdy');
             $authID = Auth::id();
             $userID = sprintf('%04d', intval($authID));
             $referenceNumber = "{$currentDate}-{$userID}-{$patientNumber}";
