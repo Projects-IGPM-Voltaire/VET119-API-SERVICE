@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Appointment;
+use App\Models\Pet;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -17,12 +18,14 @@ class AppointmentController extends Controller
         try {
             $payload = $request->all();
 
-            $todayAppointmentCount = Appointment::whereDate('created_at', today())
+            $todayAppointmentCount = Appointment::whereDate('date', $payload['date'])
                 ->get()
                 ->count();
             $patientNumber = sprintf('%04d', intval($todayAppointmentCount) + 1);
-            $currentDate = now()->format('ymd');
-            $userID = sprintf('%04d', intval($payload['user_id']));
+            $currentDate = new \DateTime($payload['date']);
+            $currentDate = $currentDate->format('ymd');
+            $authID = Auth::id();
+            $userID = sprintf('%04d', intval($authID));
             $referenceNumber = "{$currentDate}-{$userID}-{$patientNumber}";
 
             $appointment = Appointment::create([
@@ -30,9 +33,21 @@ class AppointmentController extends Controller
                 'date' => $payload['date'],
                 'time_from' => $payload['time_from'],
                 'time_to' => $payload['time_to'],
-                'user_id' => $payload['user_id'],
+                'user_id' => $authID,
                 'reference_number' => $referenceNumber
             ]);
+
+            $petPayload = $payload['pets'];
+            foreach ($petPayload as $pet)
+            {
+                $newPet = Pet::create([
+                    'name' => $pet['name'],
+                    'species' => $pet['species'],
+                    'breed' => $pet['breed'] ?? null,
+                    'user_id' => $authID,
+                ]);
+                $appointment->pets()->attach($newPet);
+            }
 
             return customResponse()
                 ->data($appointment)
