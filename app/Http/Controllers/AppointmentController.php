@@ -95,5 +95,22 @@ class AppointmentController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $appointment = Appointment::findOrFail($id);
+            return customResponse()
+                ->data($appointment)
+                ->message('Get request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->failed()
+                ->generate();
+        }
+    }
 
 }

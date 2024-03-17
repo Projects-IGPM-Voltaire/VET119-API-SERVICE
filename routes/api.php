@@ -98,6 +98,7 @@ Route::middleware(['auth:api'])
     ->group(function () {
         Route::post('/', [AppointmentController::class, 'store']);
         Route::get('/', [AppointmentController::class, 'index']);
+        Route::get('/{id}', [AppointmentController::class, 'show']);
     });
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
