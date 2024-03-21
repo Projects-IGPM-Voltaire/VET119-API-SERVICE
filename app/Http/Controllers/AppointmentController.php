@@ -71,9 +71,88 @@ class AppointmentController extends Controller
         try {
             $payload = $request->all();
             $query = Appointment::with('user')->with('pets')->withCount('pets');
+            $appointments = $query->get();
+
+            if (isset($payload['search']))
+            {
+                $searchTerm = '%' . $payload['search'] . '%';
+                if (preg_match('~[0-9]+~', $searchTerm))
+                {
+                    $query->where('reference_number', 'like', $searchTerm);
+                }
+                else
+                {
+                    $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", [$searchTerm]);
+                }
+            }
+
+            if (isset($payload['dateFrom']))
+            {
+                $query->whereDate(
+                    'date',
+                    '>=',
+                    $payload['dateFrom']
+                );
+            }
+
+            if (isset($payload['dateTo']))
+            {
+                $query->whereDate(
+                    'date',
+                    '<=',
+                    $payload['dateTo']
+                );
+            }
+
+            if (isset($payload['timeFrom']))
+            {
+                $query->whereTime(
+                    'time_from',
+                    '>=',
+                    $payload['timeFrom']
+                );
+            }
+
+            if (isset($payload['timeTo']))
+            {
+                $query->whereTime(
+                    'time_from',
+                    '<=',
+                    $payload['timeTo']
+                );
+            }
+
+            if (isset($payload['purpose']))
+            {
+                $query->where(
+                    'purpose',
+                    'like',
+                    $payload['purpose']
+                );
+            }
+
+            $appointments = $query->get();
+
+            return customResponse()
+                ->data($appointments)
+                ->message('List request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data([])
+                ->message($e->getMessage())
+                ->failed()
+                ->generate();
+        }
+    }
+
+    public function check($condition)
+    {
+        try {
+            $query = Appointment::with('user')->with('pets')->withCount('pets');
             $userID = Auth::id();
             $query->where('user_id', $userID);
-            $condition = $payload['condition'] ?? null;
 
             if ($condition == 'upcoming')
             {
@@ -119,88 +198,6 @@ class AppointmentController extends Controller
             $appointment = Appointment::with('pets')->withCount('pets')->findOrFail($id);
             return customResponse()
                 ->data($appointment)
-                ->message('Get request done.')
-                ->success()
-                ->generate();
-        } catch (Exception $e) {
-            return customResponse()
-                ->data($e->getMessage())
-                ->message($e->getMessage())
-                ->failed()
-                ->generate();
-        }
-    }
-
-    public function filter(Request $request)
-    {
-        try {
-            $payload = $request->all();
-            $query = Appointment::with('pets')->withCount('pets');
-
-            if (isset($payload['search']))
-            {
-                $searchTerm = '%' . $payload['search'] . '%';
-                if (preg_match('~[0-9]+~', $searchTerm))
-                {
-                    $query->where('reference_number', 'like', $searchTerm);
-                }
-                else
-                {
-                    $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", [$searchTerm]);
-                }
-            }
-
-            if (isset($payload['date_from']))
-            {
-                $query->whereDate(
-                    'date',
-                    '>=',
-                    $payload['date_from']
-                );
-            }
-
-            if (isset($payload['date_to']))
-            {
-                $query->whereDate(
-                    'date',
-                    '<=',
-                    $payload['date_to']
-                );
-            }
-
-            if (isset($payload['time_from']))
-            {
-                $query->whereTime(
-                    'time_from',
-                    '>=',
-                    $payload['time_from']
-                );
-            }
-
-            if (isset($payload['time_to']))
-            {
-                $query->whereTime(
-                    'time_from',
-                    '<=',
-                    $payload['time_to']
-                );
-            }
-
-            if (isset($payload['purpose']))
-            {
-                $query->where(
-                    'purpose',
-                    'like',
-                    $payload['purpose']
-                );
-            }
-
-
-
-            $appointments = $query->get();
-
-            return customResponse()
-                ->data($appointments)
                 ->message('Get request done.')
                 ->success()
                 ->generate();
