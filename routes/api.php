@@ -98,6 +98,7 @@ Route::middleware(['auth:api'])
     ->group(function () {
         Route::post('/', [AppointmentController::class, 'store']);
         Route::get('/', [AppointmentController::class, 'index']);
+        Route::delete('/delete', [AppointmentController::class, 'delete']);
         Route::get('/check/{condition}', [AppointmentController::class, 'check']);
         Route::get('/filter', [AppointmentController::class, 'filter']);
         Route::get('/{id}', [AppointmentController::class, 'show']);

@@ -28,6 +28,8 @@ class AppointmentController extends Controller
             $user = User::findOrFail($authID);
             $userID = sprintf('%04d', intval($authID));
             $referenceNumber = "{$currentDate}-{$userID}-{$patientNumber}";
+            $firstName = $payload['first_name'] ?? $user->first_name;
+            $lastName = $payload['last_name'] ?? $user->last_name;
 
             $appointment = Appointment::create([
                 'purpose' => $payload['purpose'],
@@ -36,8 +38,8 @@ class AppointmentController extends Controller
                 'time_to' => $payload['time_to'],
                 'user_id' => $authID,
                 'reference_number' => $referenceNumber,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name
+                'first_name' => $firstName,
+                'last_name' => $lastName,
             ]);
 
             $petPayload = $payload['pets'];
@@ -58,6 +60,7 @@ class AppointmentController extends Controller
                 ->success()
                 ->generate();
         } catch (Exception $e) {
+            error_log($e->getMessage());
             return customResponse()
                 ->data([])
                 ->message($e->getMessage())
@@ -204,6 +207,33 @@ class AppointmentController extends Controller
         } catch (Exception $e) {
             return customResponse()
                 ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->failed()
+                ->generate();
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $payload = $request->all();
+
+            $refNumbers = $payload['appointments'];
+
+            foreach ($refNumbers as $refNumber)
+            {
+                $appointment = Appointment::where('reference_number', $refNumber)->first();
+                $appointment->delete();
+            }
+
+            return customResponse()
+                ->data([])
+                ->message('Delete request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data([])
                 ->message($e->getMessage())
                 ->failed()
                 ->generate();
