@@ -14,7 +14,6 @@ class EmailVerificationController extends Controller
 
     public function verifyEmail($id, $hash, Request $request)
     {
-
         try {
             $user = User::find($id);
             $user->markEmailAsVerified();

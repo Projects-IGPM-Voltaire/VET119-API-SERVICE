@@ -7,6 +7,7 @@ return [
         '*',
         'https://mediqueue.vercel.app',
         'http://mediqueue.vercel.app',
+        'http://localhost:9000',
     ],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
