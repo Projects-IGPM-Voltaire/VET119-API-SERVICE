@@ -222,7 +222,7 @@ class AppointmentController extends Controller
 
             foreach ($refNumbers as $refNumber)
             {
-                $appointment = Appointment::where('reference_number', $refNumber)->first();
+                $appointment = Appointment::where('reference_number', $refNumber)->firstOrFail();
                 $appointment->delete();
             }
 
