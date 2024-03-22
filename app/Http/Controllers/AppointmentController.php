@@ -213,6 +213,33 @@ class AppointmentController extends Controller
         }
     }
 
+    public function filter(Request $request)
+    {
+        try {
+
+            $payload = $request->all();
+            $date = $payload['date'];
+
+            $query = Appointment::query();
+            $query->where('date', $date);
+            $query->select('time_from');
+
+            $appointments = $query->get();
+
+            return customResponse()
+                ->data($appointments)
+                ->message('List request done.')
+                ->success()
+                ->generate();
+        } catch (Exception $e) {
+            return customResponse()
+                ->data($e->getMessage())
+                ->message($e->getMessage())
+                ->failed()
+                ->generate();
+        }
+    }
+
     public function delete(Request $request)
     {
         try {
