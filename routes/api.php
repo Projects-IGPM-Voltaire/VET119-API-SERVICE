@@ -10,6 +10,7 @@ use App\Http\Controllers\PetController;
 use App\Http\Controllers\AppointmentController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -105,3 +106,10 @@ Route::middleware(['auth:api'])
     });
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
+
+Route::prefix('forgot-password')
+    ->group(function () {
+        Route::post('/', [ForgotPasswordController::class, 'index']);
+        Route::post('/reset', [ForgotPasswordController::class, 'reset']);
+
+    });
