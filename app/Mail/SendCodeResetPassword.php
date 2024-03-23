@@ -27,8 +27,14 @@ class SendCodeResetPassword extends Mailable
 
     public function build()
     {
+
+        $url = env('WEB_APP_URL');
+        $appName = env('APP_NAME');
+
         return $this->view('emails.send-code-reset-password')
-                    ->with('code', $this->code);
+                    ->with('code', $this->code)
+                    ->with('url', $url)
+                    ->with('appName', $appName);
     }
 
     /**

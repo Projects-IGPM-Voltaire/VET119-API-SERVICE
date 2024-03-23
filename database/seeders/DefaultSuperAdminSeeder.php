@@ -15,11 +15,11 @@ class DefaultSuperAdminSeeder extends Seeder
     public function run(): void
     {
         $payload = [
-            'first_name' => 'Chester',
-            'last_name' => 'Tan',
-            'mobile_number' => '09171529122',
-            'password' => 'password',
-            'email' => 'rey.tan@student.ateneo.edu'
+            'first_name' => 'Vet119',
+            'last_name' => 'Admin',
+            'mobile_number' => '09999999999',
+            'password' => env('ADMIN_PASSWORD'),
+            'email' => env('ADMIN_EMAIL')
         ];
 
         try {
