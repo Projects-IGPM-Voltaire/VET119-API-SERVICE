@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
 
             $appUrl = env('WEB_APP_URL');
 
-            $deconstructedUrl = explode('/api' ,$url);
+            $deconstructedUrl = explode("/api/" ,$url);
             $apiUrl = $deconstructedUrl[0];
 
             // $url = str_replace('http://127.0.0.1:8000/api/email/verify', 'http://localhost:9000/#/email-verification', $url);
