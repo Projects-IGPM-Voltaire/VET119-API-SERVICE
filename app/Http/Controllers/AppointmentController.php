@@ -213,12 +213,9 @@ class AppointmentController extends Controller
         }
     }
 
-    public function filter(Request $request)
+    public function filter($date)
     {
         try {
-
-            $payload = $request->all();
-            $date = $payload['date'];
 
             $query = Appointment::query();
             $query->where('date', $date);
