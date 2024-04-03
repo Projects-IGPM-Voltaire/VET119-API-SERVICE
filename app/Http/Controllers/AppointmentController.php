@@ -217,6 +217,8 @@ class AppointmentController extends Controller
     {
         try {
 
+            $date = explode('=', $date)[1];
+
             $query = Appointment::query();
             $query->where('date', $date);
             $query->select('time_from');
