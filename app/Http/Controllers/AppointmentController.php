@@ -234,7 +234,7 @@ class AppointmentController extends Controller
         } catch (Exception $e) {
             return customResponse()
                 ->data($e->getMessage())
-                ->message($e->getMessage())
+                ->message('Debugging')
                 ->failed()
                 ->generate();
         }
