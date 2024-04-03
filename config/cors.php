@@ -5,8 +5,8 @@ return [
     'allowed_methods' => ['*'],
     'allowed_origins' => [
         '*',
-        'https://mediqueue.vercel.app',
-        'http://mediqueue.vercel.app',
+        'https://www.vet119.com',
+        'http://www.vet119.com',
         'http://localhost:9000',
     ],
     'allowed_headers' => ['*'],
