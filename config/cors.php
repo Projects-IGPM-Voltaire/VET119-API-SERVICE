@@ -7,6 +7,8 @@ return [
         '*',
         'https://www.vet119.com',
         'http://www.vet119.com',
+        'https://vet119.com',
+        'http://vet119.com',
         'http://localhost:9000',
     ],
     'allowed_headers' => ['*'],
