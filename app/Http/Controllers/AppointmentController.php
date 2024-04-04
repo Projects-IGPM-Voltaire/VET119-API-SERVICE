@@ -216,9 +216,6 @@ class AppointmentController extends Controller
     public function filter($date)
     {
         try {
-
-            $date = explode('=', $date)[1];
-
             $query = Appointment::query();
             $query->where('date', $date);
             $query->select('time_from');
