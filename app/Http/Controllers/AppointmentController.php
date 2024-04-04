@@ -76,8 +76,6 @@ class AppointmentController extends Controller
             $query = Appointment::with('user')->with('pets')->withCount('pets');
             $appointments = $query->get();
 
-            #Debugging
-            $payload['search'] = 'arnel';
 
             if (isset($payload['search']))
             {
