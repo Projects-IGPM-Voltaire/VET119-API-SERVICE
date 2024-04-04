@@ -31,14 +31,14 @@ class AuthController extends Controller
             $accessToken = Auth::user()->createToken('authToken')->accessToken;
             $user = User::find(Auth::id());
 
-            if (!isset($user->email_verified_at))
-            {
-                return customResponse()
-                    ->data([])
-                    ->message('Please click the link sent to your email to verify.')
-                    ->unathorized()
-                    ->generate();
-            }
+            // if (!isset($user->email_verified_at))
+            // {
+                // return customResponse()
+                //     ->data([])
+                //     ->message('Please click the link sent to your email to verify.')
+                //     ->unathorized()
+                //     ->generate();
+            // }
 
             return customResponse()
                 ->data([
@@ -69,7 +69,7 @@ class AuthController extends Controller
                 'level' => $payload['level'],
                 'email' => $payload['email'],
             ]);
-            event(new Registered($user));
+            // event(new Registered($user));
             return customResponse()
                 ->data($user)
                 ->message('Operation success.')
